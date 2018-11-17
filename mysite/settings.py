@@ -51,6 +51,17 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'mysite.urls'
+print('HELLO')
+print(BASE_DIR)
+MEDIA_ROOT = os.path.join(BASE_DIR, 'blog/static/media/')
+MEDIA_URL = 'http://127.0.0.1:8000/static/media/'
+
+
+STATIC_URL = '/static/media/'
+STATIC_ROOT = "http://127.0.0.1:8000/static/media/"
+
+# MEDIA_ROOT = os.path.join(BASE_DIR, '/media/images/')
+print(MEDIA_ROOT,'att.jpeg')
 
 TEMPLATES = [
     {

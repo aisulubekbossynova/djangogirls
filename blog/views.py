@@ -4,6 +4,8 @@ from django.utils import timezone
 from django.shortcuts import render, get_object_or_404, redirect
 # Post.objects.get(pk=pk)
 from .forms import PostForm
+from django.conf import settings
+
 
 
 def post_list(request):
@@ -20,8 +22,19 @@ def post_new(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
+            if 'img' in request.FILES:
+                form.picture = request.FILES['img']
+
+            form.save()
+            # post.save()
+            post.image = settings.MEDIA_ROOT + form['image'].value()
+            uploaded_filename = request.FILES['image'].name
+            full_filename = settings.MEDIA_ROOT + uploaded_filename
+            post.image = full_filename
             post.published_date = timezone.now()
             post.save()
+            post.image.save(settings.MEDIA_ROOT + form['image'].value())
+
             return redirect('post_detail', pk=post.pk)
     else:
         form = PostForm()
@@ -30,12 +43,22 @@ def post_new(request):
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
-        form = PostForm(request.POST, instance=post)
+        form = PostForm(request.POST,  request.FILES,  instance=post)
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
+            # if 'img' in request.FILES:
+            #     form.picture = request.FILES['img']
+
+            post.save()
+            post.image = settings.MEDIA_ROOT + form['image'].value()
+            uploaded_filename = request.FILES['image'].name
+            full_filename = settings.MEDIA_ROOT + uploaded_filename
+            post.image = full_filename
             post.published_date = timezone.now()
             post.save()
+            post.image.save(full_filename)
+
             return redirect('post_detail', pk=post.pk)
     else:
         form = PostForm(instance=post)

@@ -15,6 +15,7 @@
 {% if user.is_authenticated %}
     <a href="{% url 'post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
             <h5 class="top-menu">Add a new post</h5>
+
 {% endif %}
             <h1><a href="/">{{user.get_username}}'s blog</a></h1>
         </div>
